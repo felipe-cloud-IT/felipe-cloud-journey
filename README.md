@@ -14,6 +14,7 @@ Build a career path towards Cloud Solutions Architect (Azure)
 - Enterprise Active Directory Lab
 - Azure Virtual Machine deployment
 - Basic cloud security model
+- [Glosario Fénix Azure](docs/) — buscador rápido de conceptos y señales de examen para Azure
 
 ## 🧭 Career goal
 Cloud Solutions Architect (Azure) in Europe (Spain)
