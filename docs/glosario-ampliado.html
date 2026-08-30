@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glosario Fénix Azure — Ampliado</title>
+<style>
+:root{--bg:#0b1220;--panel:#111a2b;--panel2:#172236;--text:#eaf0f7;--muted:#9fb0c3;--accent:#67b7ff;--border:#263750;--good:#9bf59b}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:10px 14px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0f1a2d,#0b1220);position:sticky;top:0;z-index:20}.wrap{max-width:1180px;margin:0 auto}h1{margin:0 0 8px;font-size:clamp(22px,2.5vw,30px)}
+nav{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 10px}nav a{color:var(--text);text-decoration:none;border:1px solid var(--border);padding:7px 10px;border-radius:999px;background:var(--panel);font-size:14px}nav a.active{border-color:var(--accent);color:var(--accent)}
+.controls{display:grid;grid-template-columns:1fr 230px;gap:9px}input,select{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:16px;outline:none}input:focus,select:focus{border-color:var(--accent)}
+main{padding:12px 14px}.stats{color:var(--muted);margin-bottom:10px;font-size:14px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(285px,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--border);border-radius:15px;padding:14px;box-shadow:0 8px 24px rgba(0,0,0,.13)}.badge{display:inline-block;font-size:12px;color:#c9dcf2;background:var(--panel2);border:1px solid var(--border);border-radius:999px;padding:4px 8px;margin-bottom:9px}.term{font-size:19px;font-weight:750;margin-bottom:4px}.es{color:var(--accent);margin-bottom:10px}.label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:9px}.value{margin-top:3px;line-height:1.4}.signal{margin-top:4px;display:inline-block;color:var(--good);font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:14px}.empty{color:var(--muted);padding:35px 0;text-align:center}.note{color:var(--muted);font-size:12px;margin:18px 0 8px}
+@media(max-width:700px){header{position:static;padding:9px 10px}main{padding:10px}.controls{grid-template-columns:1fr}.grid{grid-template-columns:1fr}h1{font-size:24px}nav a{font-size:13px;padding:6px 9px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Glosario Fénix Azure</h1><nav><a href="./">Glosario base</a><a class="active" href="glosario-ampliado.html">Glosario ampliado</a><a href="preguntas.html">Preguntas 1–200</a></nav><div class="controls"><input id="q" type="search" placeholder="Buscar término, concepto o pista: RBAC, private IP, outage, backup..." autocomplete="off"><select id="cat"><option value="">Todas las categorías</option></select></div></div></header>
+<main><div class="wrap"><div id="stats" class="stats">Cargando glosario...</div><div id="grid" class="grid"></div><div class="note">Busca por nombre en inglés, español, significado o pista típica de examen. Las comparaciones ayudan al buscador, pero no ocupan espacio en cada tarjeta.</div></div></main>
+<script>
+const extras=[
+["Compute and App Services","Azure Virtual Machine (VM)","Máquina virtual de Azure","Servidor virtual administrado por el cliente dentro de Azure.","Windows/Linux server, OS control","IaaS: el cliente administra el sistema operativo."],
+["Compute and App Services","Virtual Machine Scale Sets (VMSS)","Conjuntos de escalado de máquinas virtuales","Grupo de VMs similares que puede aumentar o reducir instancias automáticamente.","many identical VMs, autoscale","Escala cantidad de instancias, no CPU/RAM de una sola VM."],
+["Compute and App Services","Availability Set","Conjunto de disponibilidad","Distribuye VMs entre fault domains y update domains para reducir interrupciones.","fault domain, update domain","Availability Zone usa datacenters físicamente separados."],
+["Compute and App Services","Azure App Service","Azure App Service","Plataforma administrada para hospedar aplicaciones web y APIs.","web app, managed platform, no OS management","PaaS: no administras una VM completa."],
+["Compute and App Services","Azure Functions","Azure Functions","Servicio serverless para ejecutar código en respuesta a eventos o triggers.","serverless, event, trigger","No requiere administrar servidores."],
+["Compute and App Services","Autoscale","Escalado automático","Aumenta o reduce instancias automáticamente según métricas o reglas.","CPU threshold, automatically add/remove instances","Elasticity es el concepto; Autoscale es el mecanismo."],
+["Networking","Azure Load Balancer","Balanceador de carga de Azure","Distribuye tráfico TCP/UDP entre instancias backend.","TCP, UDP, backend pool, distribute traffic","Application Gateway trabaja con HTTP/HTTPS a nivel 7."],
+["Networking","Application Gateway","Puerta de enlace de aplicaciones","Balanceador web de capa 7 para HTTP/HTTPS y enrutamiento avanzado.","HTTP, HTTPS, URL path, web traffic","Load Balancer es capa 4."],
+["Networking","Azure Bastion","Azure Bastion","Permite RDP o SSH a VMs desde Azure Portal sin exponer una IP pública en la VM.","RDP, SSH, without public IP","No conecta redes completas como una VPN."],
+["Networking","Private Endpoint","Punto de conexión privado","Asigna una IP privada de una VNet a un servicio PaaS mediante Private Link.","private IP, PaaS, Private Link","Service Endpoint no crea una IP privada dedicada para el servicio."],
+["Networking","Service Endpoint","Punto de conexión de servicio","Permite restringir un servicio Azure compatible a subnets específicas.","subnet to Azure service, service endpoint","Private Endpoint crea una IP privada en la VNet."],
+["Networking","Route Table / UDR","Tabla de rutas / ruta definida por el usuario","Controla el camino del tráfico mediante rutas personalizadas.","next hop, custom route, UDR","NSG filtra; Route Table decide por dónde viaja el tráfico."],
+["Networking","Azure Firewall","Azure Firewall","Firewall administrado y con estado para proteger tráfico entre redes y hacia Internet.","central firewall, stateful, network rules","NSG filtra a nivel de subnet o NIC."],
+["Networking","NAT Gateway","Puerta de enlace NAT","Proporciona conectividad de salida a Internet para recursos de una subnet.","outbound internet, subnet, SNAT","No recibe tráfico entrante ni balancea conexiones."],
+["Networking","Network Watcher","Network Watcher","Herramientas para supervisar y diagnosticar conectividad de red en Azure.","connection troubleshoot, IP flow verify, network diagnostics","Azure Monitor es general; Network Watcher se centra en red."],
+["Networking","Azure DNS","Azure DNS","Hospeda zonas DNS y registros para resolución de nombres.","DNS zone, record, name resolution","Microsoft Entra ID gestiona identidad, no DNS."],
+["Azure Storage","Storage Account","Cuenta de almacenamiento","Contenedor administrativo que proporciona Blob, Files, Queues y Tables.","storage account, blobs, files, queues, tables","No es un único blob o archivo."],
+["Azure Storage","Azure Files","Azure Files","Recursos compartidos de archivos administrados accesibles mediante SMB o NFS según configuración.","file share, SMB, NFS","Blob Storage es almacenamiento de objetos."],
+["Azure Storage","Azure File Sync","Azure File Sync","Sincroniza Azure Files con servidores Windows y permite caché local.","Windows Server, cache, sync file share","Azure Files es el share; File Sync realiza la sincronización."],
+["Azure Storage","Shared Access Signature (SAS)","Firma de acceso compartido","Concede acceso delegado, limitado y temporal a recursos de Storage.","temporary access, permissions, expiry","No entrega la clave completa de la cuenta."],
+["Azure Storage","Storage Account Access Keys","Claves de acceso de Storage Account","Credenciales de alto privilegio que permiten acceso amplio a una Storage Account.","account key, full storage access","SAS permite acceso más limitado y temporal."],
+["Azure Storage","Lifecycle Management","Administración del ciclo de vida","Aplica reglas para mover o eliminar blobs según antigüedad o condiciones.","move to cool, move to archive, delete after days","No es backup."],
+["Identity and Access","Managed Identity","Identidad administrada","Identidad gestionada por Azure para que un recurso se autentique sin guardar credenciales en código.","no stored credentials, Azure resource authenticates","Evita manejar secretos manualmente."],
+["Identity and Access","Role Assignment","Asignación de rol","Une una identidad, un rol RBAC y un ámbito.","who + role + scope","El rol define permisos; la asignación los aplica."],
+["Identity and Access","RBAC Scope","Ámbito RBAC","Nivel donde se aplica un rol: Management Group, Subscription, Resource Group o Resource.","scope, inherited permissions","Los permisos pueden heredarse desde ámbitos superiores."],
+["Identity and Access","Privileged Identity Management (PIM)","Administración de identidades con privilegios","Administra acceso privilegiado temporal y bajo demanda.","just-in-time, eligible role, privileged access","RBAC define permisos; PIM controla activación temporal."],
+["Monitoring and Support","Log Analytics Workspace","Área de trabajo de Log Analytics","Almacena y permite consultar logs usados por Azure Monitor.","KQL, logs, workspace, query","Azure Monitor es la plataforma; Log Analytics consulta logs."],
+["Monitoring and Support","Action Group","Grupo de acciones","Define notificaciones o acciones cuando se activa una alerta.","alert notification, email, SMS, webhook","La alerta detecta; Action Group notifica o ejecuta."],
+["Backup and Recovery","Recovery Services vault","Almacén de Recovery Services","Contenedor para administrar elementos de respaldo y recuperación compatibles.","backup vault, recovery points, Azure Backup","Es el contenedor; Azure Backup es el servicio."],
+["Backup and Recovery","Azure Backup","Azure Backup","Servicio administrado para realizar copias de seguridad y restaurar cargas compatibles.","backup, restore, recovery point","Site Recovery se centra en continuidad ante desastre."],
+["Backup and Recovery","Azure Site Recovery (ASR)","Azure Site Recovery","Replica cargas para facilitar failover y recuperación ante desastres.","replication, failover, disaster recovery site","Backup restaura datos; Site Recovery mantiene réplica para continuidad."]
+].map(x=>({category:x[0],term:x[1],es:x[2],meaning:x[3],signal:x[4],compare:x[5]}));
+function norm(s){return(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')}
+let entries=[];
+async function loadBase(){
+ try{
+  const t=await fetch('./index.html',{cache:'no-store'}).then(r=>r.text());
+  const m=t.match(/const entries=(.*?);function norm/s);
+  if(m){entries=(new Function('return ('+m[1]+')'))();}
+ }catch(e){}
+ const seen=new Set(entries.map(e=>e.term.toLowerCase()));
+ for(const e of extras){if(!seen.has(e.term.toLowerCase())){entries.push(e);seen.add(e.term.toLowerCase())}}
+ const cats=[...new Set(entries.map(e=>e.category))];
+ const cat=document.getElementById('cat');cats.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;cat.appendChild(o)});
+ render();
+}
+function render(){
+ const q=norm(document.getElementById('q').value.trim()),cat=document.getElementById('cat').value;
+ const filtered=entries.filter(e=>{const hay=norm([e.term,e.es,e.meaning,e.signal,e.compare,e.category].join(' '));return(!q||hay.includes(q))&&(!cat||e.category===cat)});
+ document.getElementById('stats').textContent=`${filtered.length} término${filtered.length===1?'':'s'} encontrado${filtered.length===1?'':'s'}`;
+ const grid=document.getElementById('grid');
+ if(!filtered.length){grid.innerHTML='<div class="empty">No encontré coincidencias. Prueba con otro término o pista.</div>';return}
+ grid.innerHTML=filtered.map(e=>`<article class="card"><div class="badge">${e.category}</div><div class="term">${e.term}</div><div class="es">${e.es}</div><div class="label">Qué significa</div><div class="value">${e.meaning}</div><div class="label">Señal típica</div><div class="signal">${e.signal}</div></article>`).join('');
+}
+document.getElementById('q').addEventListener('input',render);document.getElementById('cat').addEventListener('change',render);loadBase();
+</script>
+</body></html>
