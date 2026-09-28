@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diccionario Fénix Python</title>
+<style>
+:root{--bg:#0b1220;--panel:#111a2b;--panel2:#172236;--text:#eaf0f7;--muted:#9fb0c3;--accent:#67b7ff;--border:#263750;--good:#a6e3a1}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:14px 18px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0f1a2d,#0b1220);position:sticky;top:0;z-index:20}
+.wrap{max-width:1180px;margin:0 auto}
+h1{margin:0 0 6px;font-size:clamp(22px,2.5vw,30px)}
+.subtitle{color:var(--muted);margin:0 0 10px}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 14px}
+nav a{color:var(--text);text-decoration:none;border:1px solid var(--border);padding:9px 13px;border-radius:999px;background:var(--panel)}
+nav a.active{border-color:var(--accent);color:var(--accent)}
+.controls{display:grid;grid-template-columns:1fr 230px;gap:10px}
+input,select{width:100%;padding:14px 15px;border-radius:12px;border:1px solid var(--border);background:var(--panel);color:var(--text);font-size:16px;outline:none}
+input:focus,select:focus{border-color:var(--accent)}
+main{padding:14px 18px}.stats{color:var(--muted);margin-bottom:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:14px;box-shadow:0 10px 30px rgba(0,0,0,.14)}
+.badge{display:inline-block;font-size:12px;color:#c9dcf2;background:var(--panel2);border:1px solid var(--border);border-radius:999px;padding:5px 9px;margin-bottom:10px}
+.term{font-size:21px;font-weight:750;margin-bottom:4px}.es{color:var(--accent);margin-bottom:12px}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:10px}
+.value{margin-top:3px;line-height:1.45}.signal{margin-top:4px;display:inline-block;color:var(--good);font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.footer-note{color:var(--muted);font-size:13px;margin:22px 0 8px}
+@media(max-width:700px){.controls{grid-template-columns:1fr}header{position:static}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Diccionario Fénix Python</h1>
+<p class="subtitle">Conceptos trabajados en Fénix Academia · definición, ejemplo y relación práctica.</p>
+<nav><a href="./">Azure</a><a class="active" href="python.html">Python</a><a href="glosario-media.html">Audio y video del glosario</a><a href="preguntas.html">Preguntas 1–200</a></nav>
+<div class="controls">
+<input id="q" type="search" placeholder="Buscar: %, return, división, comparación, and..." autocomplete="off">
+<select id="cat"><option value="">Todas las categorías</option><option>Operadores</option></select>
+</div></div></header>
+<main><div class="wrap"><div id="stats" class="stats"></div><div id="grid" class="grid"></div>
+<div class="footer-note">Estado actual: primer lote del Diccionario Virtual Fénix para Python. Se ampliará por familias de conceptos.</div>
+</div></main>
+<script>
+const entries=[
+["Operadores","=","Asignación","Asigna un valor a una variable.","Guarda un valor bajo un nombre.","puerto = 22","No confundir con ==, que compara.","APLICADO"],
+["Operadores","==","Comparación de igualdad","Compara dos valores y devuelve True si son iguales.","Pregunta: ¿estos dos valores son iguales?","puerto == 22","No confundir con =, que asigna.","APLICADO"],
+["Operadores","!=","Distinto de","Compara dos valores y devuelve True si son diferentes.","Pregunta: ¿esto no es igual a aquello?","number != 10","Es la comparación opuesta a ==.","APLICADO"],
+["Operadores",">","Mayor que","Devuelve True si el valor izquierdo es mayor que el derecho.","Se lee: a es mayor que b.","latencia > 100","La punta del símbolo queda hacia el valor menor.","APLICADO"],
+["Operadores","<","Menor que","Devuelve True si el valor izquierdo es menor que el derecho.","Se lee: a es menor que b.","number < 12","La punta del símbolo queda hacia el valor menor.","APLICADO"],
+["Operadores",">=","Mayor o igual que","Devuelve True si el valor izquierdo es mayor o igual que el derecho.","Acepta el límite y cualquier valor superior.","uso >= 90","A diferencia de >, incluye el límite.","APLICADO"],
+["Operadores","<=","Menor o igual que","Devuelve True si el valor izquierdo es menor o igual que el derecho.","Acepta el límite y cualquier valor inferior.","uso <= 100","A diferencia de <, incluye el límite.","COMPRENDIDO"],
+["Operadores","+","Suma / concatenación","Suma números o une cadenas de texto compatibles.","Con números suma; con texto puede unir cadenas.","total = bill + tip","Para unir texto con número puede requerirse str().","APLICADO"],
+["Operadores","*","Multiplicación","Multiplica valores numéricos.","Calcula cuántas veces se toma una cantidad.","tip = bill * 0.15","No confundir con **, que calcula potencias.","APLICADO"],
+["Operadores","/","División normal","Divide dos valores y normalmente produce un float.","Reparte una cantidad y conserva la parte decimal.","10 / 10  # 1.0","A diferencia de //, conserva la parte decimal.","APLICADO"],
+["Operadores","//","División entera / floor division","Divide y devuelve el cociente redondeado hacia abajo.","Dice cuántas veces cabe completamente un valor dentro de otro.","full_blocks = filesize // block_size","No es lo mismo que /.","APLICADO"],
+["Operadores","%","Módulo","Devuelve el resto de una división.","Permite saber si después de dividir todavía sobra algo.","partial_block_remainder = filesize % block_size","No devuelve el cociente; devuelve el resto.","APLICADO"],
+["Operadores","**","Potencia","Eleva un número a una potencia.","Multiplica una base por sí misma según el exponente.","2 ** 2  # 4","No confundir con *.","APLICADO"],
+["Operadores","and","Y lógico","Devuelve True cuando ambas condiciones son verdaderas.","Tiene que cumplirse esto y también esto.","edad >= 18 and edad <= 65","Con or basta una condición verdadera.","APLICADO"],
+["Operadores","or","O lógico","Devuelve True si al menos una condición es verdadera.","Basta con que ocurra una cosa o la otra.","valor < 0 or valor > 100","Con and deben cumplirse ambas.","APLICADO"],
+["Operadores","not","Negación lógica","Invierte el valor booleano de una expresión.","Convierte True en False y False en True.","not activo","No compara dos valores; niega una condición.","APLICADO"]
+].map(x=>({category:x[0],term:x[1],es:x[2],meaning:x[3],feynman:x[4],example:x[5],compare:x[6],status:x[7]}));
+function norm(s){return(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
+function render(){
+ const q=norm(document.getElementById("q").value.trim()),cat=document.getElementById("cat").value;
+ const filtered=entries.filter(e=>{const hay=norm([e.term,e.es,e.meaning,e.feynman,e.example,e.compare,e.status,e.category].join(" "));return(!q||hay.includes(q))&&(!cat||e.category===cat)});
+ document.getElementById("stats").textContent=`${filtered.length} término${filtered.length===1?"":"s"} encontrado${filtered.length===1?"":"s"}`;
+ document.getElementById("grid").innerHTML=filtered.map(e=>`<article class="card"><div class="badge">Python · ${e.category}</div><div class="term">${e.term}</div><div class="es">${e.es}</div><div class="label">Qué significa</div><div class="value">${e.meaning}</div><div class="label">Feynman</div><div class="value">${e.feynman}</div><div class="label">Ejemplo</div><div class="signal">${e.example}</div><div class="label">No confundir con</div><div class="value">${e.compare}</div><div class="label">Estado</div><div class="value"><strong>${e.status}</strong></div></article>`).join("");
+}
+document.getElementById("q").addEventListener("input",render);document.getElementById("cat").addEventListener("change",render);render();
+</script>
+</body>
+</html>
