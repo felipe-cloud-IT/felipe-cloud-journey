@@ -36,10 +36,10 @@ main{padding:14px 18px}.stats{color:var(--muted);margin-bottom:10px}
 <nav><a href="./">Azure</a><a class="active" href="python.html">Python</a><a href="glosario-media.html">Audio y video del glosario</a><a href="preguntas.html">Preguntas 1–200</a></nav>
 <div class="controls">
 <input id="q" type="search" placeholder="Buscar: %, return, división, comparación, and..." autocomplete="off">
-<select id="cat"><option value="">Todas las categorías</option><option>Operadores</option></select>
+<select id="cat"><option value="">Todas las categorías</option><option>Operadores</option><option>Funciones y flujo</option></select>
 </div></div></header>
 <main><div class="wrap"><div id="stats" class="stats"></div><div id="grid" class="grid"></div>
-<div class="footer-note">Estado actual: primer lote del Diccionario Virtual Fénix para Python. Se ampliará por familias de conceptos.</div>
+<div class="footer-note">Estado actual: operadores y funciones/flujo incorporados al Diccionario Virtual Fénix para Python.</div>
 </div></main>
 <script>
 const entries=[
@@ -58,7 +58,18 @@ const entries=[
 ["Operadores","**","Potencia","Eleva un número a una potencia.","Multiplica una base por sí misma según el exponente.","2 ** 2  # 4","No confundir con *.","APLICADO"],
 ["Operadores","and","Y lógico","Devuelve True cuando ambas condiciones son verdaderas.","Tiene que cumplirse esto y también esto.","edad >= 18 and edad <= 65","Con or basta una condición verdadera.","APLICADO"],
 ["Operadores","or","O lógico","Devuelve True si al menos una condición es verdadera.","Basta con que ocurra una cosa o la otra.","valor < 0 or valor > 100","Con and deben cumplirse ambas.","APLICADO"],
-["Operadores","not","Negación lógica","Invierte el valor booleano de una expresión.","Convierte True en False y False en True.","not activo","No compara dos valores; niega una condición.","APLICADO"]
+["Operadores","not","Negación lógica","Invierte el valor booleano de una expresión.","Convierte True en False y False en True.","not activo","No compara dos valores; niega una condición.","APLICADO"],
+["Funciones y flujo","def","Definir una función","Palabra clave que inicia la definición de una función.","Le dice a Python: aquí voy a crear una función con este nombre.","def evaluar_disco(valor):","Definir no ejecuta la función; para ejecutarla hay que llamarla.","APLICADO"],
+["Funciones y flujo","Función","Bloque reutilizable de código","Agrupa instrucciones bajo un nombre para poder ejecutarlas cuando sea necesario.","Es como guardar un procedimiento para usarlo cada vez que lo necesites.","def convertir_distancia(km): ...","No confundir con una llamada: definir crea la función; llamar la ejecuta.","APLICADO"],
+["Funciones y flujo","Parámetro","Nombre que recibe un valor dentro de una función","Variable declarada en la definición de una función que representa el dato que recibirá.","Es el nombre del espacio donde la función espera recibir un dato.","def greeting(name):","El parámetro aparece en la definición; el argumento aparece en la llamada.","APLICADO"],
+["Funciones y flujo","Argumento","Valor enviado a una función","Dato concreto que se entrega cuando se llama a una función.","Es el valor real que entra al parámetro.","greeting(\"Taylor\")","No confundir con parámetro: Taylor es argumento; name es parámetro.","APLICADO"],
+["Funciones y flujo","Llamada de función","Ejecutar una función","Usar el nombre de una función seguido de paréntesis para ejecutarla.","La función ya existe; ahora le digo que trabaje.","convert_distance(my_trip_kilometers)","Definir con def no ejecuta; la llamada sí.","APLICADO"],
+["Funciones y flujo","return","Retornar un valor","Devuelve un resultado desde una función y termina su ejecución en ese punto.","La función entrega su respuesta y termina su trabajo.","return \"Alerta\"","No confundir con print(): print muestra; return entrega un valor al programa.","APLICADO"],
+["Funciones y flujo","if","Condición principal","Ejecuta un bloque si una condición es True.","Si esto se cumple, haz esto.","if puerto == 22:","Solo evalúa su bloque cuando la condición es verdadera.","APLICADO"],
+["Funciones y flujo","elif","Condición alternativa","Evalúa otra condición cuando las anteriores fueron False.","Si lo anterior no se cumplió, prueba esta otra condición.","elif uso >= 80:","Se evalúa de arriba hacia abajo y se detiene en la primera rama verdadera.","APLICADO"],
+["Funciones y flujo","else","Caso restante","Ejecuta un bloque cuando ninguna condición anterior fue verdadera.","Si nada de lo anterior ocurrió, haz esto.","else:","No lleva condición propia.","APLICADO"],
+["Funciones y flujo","Flujo de decisión","Orden de evaluación de condiciones","Python evalúa if y elif de arriba hacia abajo y toma la primera rama verdadera.","Python revisa las condiciones en orden y entra en la primera que se cumple.","if ... elif ... else","El orden de las condiciones puede cambiar el resultado.","APLICADO"],
+["Funciones y flujo","Variable local","Variable disponible dentro de una función","Variable creada dentro de una función y accesible normalmente solo dentro de ella.","Es una variable que vive dentro del trabajo de esa función.","m = km * 1000","Una variable local no se usa directamente fuera de la función.","APLICADO"]
 ].map(x=>({category:x[0],term:x[1],es:x[2],meaning:x[3],feynman:x[4],example:x[5],compare:x[6],status:x[7]}));
 function norm(s){return(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
 function render(){
