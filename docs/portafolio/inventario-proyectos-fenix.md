@@ -31,3 +31,11 @@ Este índice registra proyectos identificados en Google Drive para convertirlos 
 - Prioridad: revisar Fénix Estadístico y Fénix Infra Lab antes de iniciar proyectos nuevos.
 
 Registro de trabajo complementario en Drive: «FÉNIX ACADEMIA 2027 — Registro de oportunidades y evidencias — 2026-10-12».
+
+## Convención de anonimización laboral
+
+- Denominación pública del sector: **Transporte y Servicios**. No mencionar el nombre real del empleador ni marcas que permitan identificarlo.
+- Presentar el contexto como «Infraestructura TI y Continuidad Operacional en Transporte y Servicios».
+- Antes de publicar: reemplazar dominios, IP, usuarios, rutas, nombres de servidores, clientes, identificadores de carga y detalles operacionales por datos ficticios.
+- No subir configuraciones, bases de datos, respaldos, capturas ni logs reales de producción. Recrear los casos en un laboratorio aislado y explicar que se trata de una simulación.
+- Distinguir claramente la experiencia laboral descrita de la evidencia obtenida en laboratorios.
