@@ -30,7 +30,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .hint{display:none;margin-top:12px;padding:12px;border-left:3px solid var(--warn);background:#151a22;color:#f4e7bb;border-radius:8px}
 .status{font-size:13px;color:var(--muted);margin-top:8px}
 .good{color:var(--good)}
-.warn{color:var(--warn)}
+.warn{color:var(--warn)}.future{display:inline-block;margin-left:6px;padding:3px 7px;border-radius:999px;border:1px solid var(--warn);color:var(--warn);font-size:12px;font-weight:700}
 .small{font-size:13px;color:var(--muted);line-height:1.5}
 @media(max-width:800px){.layout{grid-template-columns:1fr}textarea{min-height:280px}}
 </style>
@@ -58,7 +58,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <option value="">Todos los módulos</option>
 <option value="Módulo 1">Módulo 1</option>
 <option value="Módulo 2">Módulo 2</option>
-<option value="Módulo 3">Módulo 3</option>
+<option value="Módulo 3">Módulo 3</option><option value="Módulo 4">Módulo 4 · Próximo</option><option value="Módulo 5">Módulo 5 · Próximo</option>
 </select>
 <select id="levelFilter" aria-label="Filtrar por dificultad">
 <option value="">Todos los niveles</option>
@@ -363,7 +363,127 @@ const exercises = [
     "text": "Imprime los múltiplos de 3 desde 3 hasta 18 usando range().",
     "hint": "Piensa en inicio 3, un límite superior a 18 y step 3."
   }
-];
+,
+{
+  "module": "Módulo 4",
+  "topic": "Strings",
+  "level": "Básico",
+  "future": true,
+  "text": "Obtén el primer carácter de la cadena 'Fenix'.",
+  "hint": "Más adelante veremos indexación: los índices comienzan en 0."
+},
+{
+  "module": "Módulo 4",
+  "topic": "Slicing",
+  "level": "Medio",
+  "future": true,
+  "text": "Extrae los tres primeros caracteres de 'Python'.",
+  "hint": "Este ejercicio usa segmentación de cadenas."
+},
+{
+  "module": "Módulo 4",
+  "topic": "Listas",
+  "level": "Básico",
+  "future": true,
+  "text": "Crea una lista con tres servidores y muestra el segundo elemento.",
+  "hint": "Más adelante veremos listas e índices."
+},
+{
+  "module": "Módulo 4",
+  "topic": "Listas",
+  "level": "Medio",
+  "future": true,
+  "text": "Recorre una lista de nombres y muestra cada elemento.",
+  "hint": "Este ejercicio combina listas con for."
+},
+{
+  "module": "Módulo 4",
+  "topic": "Tuplas",
+  "level": "Básico",
+  "future": true,
+  "text": "Crea una tupla con dos coordenadas y muestra ambas.",
+  "hint": "Las tuplas son colecciones ordenadas e inmutables."
+},
+{
+  "module": "Módulo 4",
+  "topic": "enumerate()",
+  "level": "Medio",
+  "future": true,
+  "text": "Recorre una lista mostrando índice y valor con enumerate().",
+  "hint": "enumerate() entrega posición y elemento."
+},
+{
+  "module": "Módulo 4",
+  "topic": "Comprensión de listas",
+  "level": "Desafío",
+  "future": true,
+  "text": "Crea una lista con los cuadrados de 1 a 5 usando comprensión de listas.",
+  "hint": "Es una forma compacta de construir listas a partir de un recorrido."
+},
+{
+  "module": "Módulo 4",
+  "topic": "Diccionarios",
+  "level": "Básico",
+  "future": true,
+  "text": "Crea un diccionario con nombre e IP de un servidor y muestra la IP.",
+  "hint": "Los diccionarios usan pares clave-valor."
+},
+{
+  "module": "Módulo 4",
+  "topic": "Diccionarios",
+  "level": "Medio",
+  "future": true,
+  "text": "Recorre un diccionario y muestra sus claves y valores.",
+  "hint": "Más adelante veremos cómo iterar sobre diccionarios."
+},
+{
+  "module": "Módulo 4",
+  "topic": "POO",
+  "level": "Desafío",
+  "future": true,
+  "text": "Crea una clase Servidor con un atributo nombre.",
+  "hint": "Este bloque es opcional y corresponde a introducción a programación orientada a objetos."
+},
+{
+  "module": "Módulo 5",
+  "topic": "Planteamiento del problema",
+  "level": "Básico",
+  "future": true,
+  "text": "Escribe en comentarios el problema que resolvería un script que alerta por uso de disco alto.",
+  "hint": "Primero define entrada, condición y salida esperada."
+},
+{
+  "module": "Módulo 5",
+  "topic": "Planificación",
+  "level": "Medio",
+  "future": true,
+  "text": "Escribe pseudocódigo para pedir un porcentaje de uso de disco y clasificarlo.",
+  "hint": "No necesitas sintaxis Python perfecta; ordena los pasos de la solución."
+},
+{
+  "module": "Módulo 5",
+  "topic": "Integración",
+  "level": "Medio",
+  "future": true,
+  "text": "Diseña un script que pida un valor, lo convierta, evalúe y muestre un resultado.",
+  "hint": "Integra input(), conversión, condición y salida."
+},
+{
+  "module": "Módulo 5",
+  "topic": "Funciones + flujo",
+  "level": "Desafío",
+  "future": true,
+  "text": "Crea una función que reciba uso de disco y devuelva Normal, Advertencia o Alerta.",
+  "hint": "Combina funciones, parámetros, return e if/elif/else."
+},
+{
+  "module": "Módulo 5",
+  "topic": "Proyecto final",
+  "level": "Desafío",
+  "future": true,
+  "text": "Construye un pequeño script completo que resuelva una tarea repetitiva de soporte TI.",
+  "hint": "Define primero el problema, luego entradas, proceso, salida y validación."
+}];
 
 let current = 0;
 let pyodide = null;
@@ -382,7 +502,7 @@ function showExercise(index){
   document.getElementById("exerciseNumber").textContent=`Ejercicio ${index+1}/${exercises.length}`;
   document.getElementById("module").textContent=ex.module;
   document.getElementById("topic").textContent=ex.topic;
-  document.getElementById("level").textContent=ex.level;
+  document.getElementById("level").innerHTML=ex.level + (ex.future ? '<span class="future">PRÓXIMO · AÚN NO ESTUDIADO</span>' : '');
   document.getElementById("exercise").textContent=ex.text;
   document.getElementById("hint").textContent=ex.hint;
   document.getElementById("hint").style.display="none";
