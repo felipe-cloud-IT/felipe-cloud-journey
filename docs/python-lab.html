@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Laboratorio Python Fénix</title>
+<style>
+:root{--bg:#0b1220;--panel:#111a2b;--panel2:#172236;--text:#eaf0f7;--muted:#9fb0c3;--accent:#67b7ff;--border:#263750;--good:#a6e3a1;--warn:#ffd166}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{padding:14px 18px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,#0f1a2d,#0b1220)}
+.wrap{max-width:1100px;margin:0 auto}
+h1{margin:0 0 6px;font-size:clamp(24px,3vw,34px)}
+.subtitle{color:var(--muted);margin:0}
+nav{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 0}
+nav a{color:var(--text);text-decoration:none;border:1px solid var(--border);padding:9px 13px;border-radius:999px;background:var(--panel)}
+nav a.active{border-color:var(--accent);color:var(--accent)}
+main{padding:18px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:16px}
+.card h2{margin:0 0 10px;font-size:20px}
+.meta{color:var(--muted);font-size:14px;margin-bottom:10px}
+textarea{width:100%;min-height:340px;resize:vertical;background:#09101c;color:#eaf0f7;border:1px solid var(--border);border-radius:12px;padding:14px;font:15px/1.5 Consolas,ui-monospace,monospace;outline:none}
+textarea:focus{border-color:var(--accent)}
+button,.button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:10px;padding:10px 14px;font-weight:650;cursor:pointer;text-decoration:none;display:inline-block}
+button.primary{border-color:var(--accent);color:var(--accent)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.output{min-height:180px;white-space:pre-wrap;background:#071019;border:1px solid var(--border);border-radius:12px;padding:14px;font:14px/1.5 Consolas,ui-monospace,monospace;overflow:auto}
+.exercise{font-size:18px;line-height:1.5;margin:8px 0 12px}
+.hint{display:none;margin-top:12px;padding:12px;border-left:3px solid var(--warn);background:#151a22;color:#f4e7bb;border-radius:8px}
+.status{font-size:13px;color:var(--muted);margin-top:8px}
+.good{color:var(--good)}
+.warn{color:var(--warn)}
+.small{font-size:13px;color:var(--muted);line-height:1.5}
+@media(max-width:800px){.layout{grid-template-columns:1fr}textarea{min-height:280px}}
+</style>
+<script src="https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.js"></script>
+</head>
+<body>
+<header><div class="wrap">
+<h1>Laboratorio Python Fénix</h1>
+<p class="subtitle">Práctica rápida desde cualquier navegador · escribe, ejecuta, corrige y vuelve a intentar.</p>
+<nav>
+<a href="./">Inicio</a>
+<a href="python.html">Diccionario Python</a>
+<a class="active" href="python-lab.html">Laboratorio</a>
+<a href="preguntas.html">Preguntas</a>
+</nav>
+</div></header>
+
+<main><div class="wrap">
+<div class="layout">
+<section class="card">
+<h2>Ejercicio</h2>
+<div class="meta"><span id="exerciseNumber"></span> · <span id="topic"></span> · <span id="level"></span></div>
+<div id="exercise" class="exercise"></div>
+<div class="actions">
+<button id="newExercise">Otro ejercicio</button>
+<button id="hintButton">Pista</button>
+<a class="button" href="python.html">Consultar diccionario</a>
+</div>
+<div id="hint" class="hint"></div>
+<p class="small">La solución no se muestra automáticamente. Primero intenta resolverlo y ejecutar tu código.</p>
+</section>
+
+<section class="card">
+<h2>Editor Python</h2>
+<textarea id="code" spellcheck="false" aria-label="Editor Python"># Escribe aquí tu solución
+</textarea>
+<div class="actions">
+<button class="primary" id="runButton" disabled>Preparando Python...</button>
+<button id="clearButton">Limpiar</button>
+</div>
+<div id="status" class="status">Cargando Python en el navegador...</div>
+</section>
+
+<section class="card" style="grid-column:1/-1">
+<h2>Salida</h2>
+<div id="output" class="output">La salida de tu programa aparecerá aquí.</div>
+</section>
+</div>
+</div></main>
+
+<script>
+const exercises = [
+ {topic:"while",level:"Básico",text:"Imprime los números del 1 al 5 usando un bucle while.",hint:"Inicializa una variable en 1, usa una condición <= 5 y actualízala en cada vuelta."},
+ {topic:"while",level:"Básico",text:"Imprime 10, 8, 6, 4 y 2 usando while.",hint:"Comienza en 10 y resta 2 en cada iteración."},
+ {topic:"while",level:"Medio",text:"Suma los números del 1 al 4 y muestra solo el total final.",hint:"Necesitas un acumulador inicializado en 0 y un contador que avance hasta 4."},
+ {topic:"break",level:"Medio",text:"Imprime números desde 1 y detén el bucle inmediatamente cuando el valor llegue a 4.",hint:"Usa while, una condición if y break. Piensa si quieres imprimir el 4 antes o después del break."},
+ {topic:"for",level:"Básico",text:"Imprime los números del 1 al 4 usando for y range().",hint:"Recuerda que el límite final de range() no se incluye."},
+ {topic:"range()",level:"Básico",text:"Imprime 2, 4, 6 y 8 usando for y range().",hint:"Usa inicio 2, límite 10 y un step de 2."},
+ {topic:"range()",level:"Básico",text:"Imprime 5, 4, 3, 2 y 1 usando for y range().",hint:"Para bajar, el step debe ser negativo."},
+ {topic:"range()",level:"Medio",text:"Imprime 1, 4 y 7 usando una sola llamada a range().",hint:"El inicio es 1 y avanzas de 3 en 3. El límite final no se incluye."},
+ {topic:"for",level:"Medio",text:"Calcula y muestra la suma de los números del 1 al 5 usando for.",hint:"Usa un acumulador y recorre range(1, 6)."},
+ {topic:"while",level:"Desafío",text:"Cuenta hacia atrás desde 5 hasta 1 y al final imprime FIN.",hint:"El print('FIN') debe quedar fuera del bucle si quieres mostrarlo una sola vez."}
+];
+
+let current = 0;
+let pyodide = null;
+const output = document.getElementById("output");
+const runButton = document.getElementById("runButton");
+const status = document.getElementById("status");
+
+function showExercise(index){
+  current=index;
+  const ex=exercises[index];
+  document.getElementById("exerciseNumber").textContent=`Ejercicio ${index+1}/${exercises.length}`;
+  document.getElementById("topic").textContent=ex.topic;
+  document.getElementById("level").textContent=ex.level;
+  document.getElementById("exercise").textContent=ex.text;
+  document.getElementById("hint").textContent=ex.hint;
+  document.getElementById("hint").style.display="none";
+  document.getElementById("hintButton").textContent="Pista";
+}
+showExercise(0);
+
+document.getElementById("newExercise").addEventListener("click",()=>{
+  let next=current;
+  if(exercises.length>1){
+    while(next===current) next=Math.floor(Math.random()*exercises.length);
+  }
+  showExercise(next);
+});
+
+document.getElementById("hintButton").addEventListener("click",()=>{
+  const h=document.getElementById("hint");
+  const visible=h.style.display==="block";
+  h.style.display=visible?"none":"block";
+  document.getElementById("hintButton").textContent=visible?"Pista":"Ocultar pista";
+});
+
+document.getElementById("clearButton").addEventListener("click",()=>{
+  document.getElementById("code").value="# Escribe aquí tu solución\n";
+  output.textContent="La salida de tu programa aparecerá aquí.";
+});
+
+async function initPython(){
+  try{
+    pyodide=await loadPyodide({indexURL:"https://cdn.jsdelivr.net/pyodide/v314.0.7/full/"});
+    runButton.disabled=false;
+    runButton.textContent="Ejecutar";
+    status.innerHTML='<span class="good">Python listo.</span> Se ejecuta localmente en este navegador.';
+  }catch(err){
+    status.innerHTML='<span class="warn">No se pudo cargar Python.</span> Revisa tu conexión y recarga la página.';
+    output.textContent=String(err);
+  }
+}
+initPython();
+
+runButton.addEventListener("click",async()=>{
+  if(!pyodide) return;
+  runButton.disabled=true;
+  runButton.textContent="Ejecutando...";
+  output.textContent="";
+  try{
+    pyodide.runPython(`
+import sys, io
+_fenix_stdout = io.StringIO()
+_fenix_stderr = io.StringIO()
+sys.stdout = _fenix_stdout
+sys.stderr = _fenix_stderr
+`);
+    await pyodide.runPythonAsync(document.getElementById("code").value);
+    const stdout=pyodide.runPython("_fenix_stdout.getvalue()");
+    const stderr=pyodide.runPython("_fenix_stderr.getvalue()");
+    output.textContent=(stdout||stderr||"Programa ejecutado sin salida.");
+  }catch(err){
+    output.textContent=String(err);
+  }finally{
+    try{
+      pyodide.runPython("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__");
+    }catch(e){}
+    runButton.disabled=false;
+    runButton.textContent="Ejecutar";
+  }
+});
+</script>
+</body>
+</html>
