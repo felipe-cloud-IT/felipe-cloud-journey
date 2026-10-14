@@ -21,7 +21,7 @@ main{padding:18px}.layout{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .meta{color:var(--muted);font-size:14px;margin-bottom:10px}
 textarea{width:100%;min-height:340px;resize:vertical;background:#09101c;color:#eaf0f7;border:1px solid var(--border);border-radius:12px;padding:14px;font:15px/1.5 Consolas,ui-monospace,monospace;outline:none}
 textarea:focus{border-color:var(--accent)}
-button,.button{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:10px;padding:10px 14px;font-weight:650;cursor:pointer;text-decoration:none;display:inline-block}
+button,.button,select{border:1px solid var(--border);background:var(--panel2);color:var(--text);border-radius:10px;padding:10px 14px;font-weight:650;cursor:pointer;text-decoration:none;display:inline-block}
 button.primary{border-color:var(--accent);color:var(--accent)}
 button:disabled{opacity:.55;cursor:not-allowed}
 .actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
@@ -52,7 +52,21 @@ button:disabled{opacity:.55;cursor:not-allowed}
 <div class="layout">
 <section class="card">
 <h2>Ejercicio</h2>
-<div class="meta"><span id="exerciseNumber"></span> · <span id="topic"></span> · <span id="level"></span></div>
+<div class="meta"><span id="exerciseNumber"></span> · <span id="module"></span> · <span id="topic"></span> · <span id="level"></span></div>
+<div class="actions" style="margin:0 0 12px">
+<select id="moduleFilter" aria-label="Filtrar por módulo">
+<option value="">Todos los módulos</option>
+<option value="Módulo 1">Módulo 1</option>
+<option value="Módulo 2">Módulo 2</option>
+<option value="Módulo 3">Módulo 3</option>
+</select>
+<select id="levelFilter" aria-label="Filtrar por dificultad">
+<option value="">Todos los niveles</option>
+<option value="Básico">Básico</option>
+<option value="Medio">Medio</option>
+<option value="Desafío">Desafío</option>
+</select>
+</div>
 <div id="exercise" class="exercise"></div>
 <div class="actions">
 <button id="newExercise">Otro ejercicio</button>
@@ -83,20 +97,281 @@ button:disabled{opacity:.55;cursor:not-allowed}
 
 <script>
 const exercises = [
- {topic:"while",level:"Básico",text:"Imprime los números del 1 al 5 usando un bucle while.",hint:"Inicializa una variable en 1, usa una condición <= 5 y actualízala en cada vuelta."},
- {topic:"while",level:"Básico",text:"Imprime 10, 8, 6, 4 y 2 usando while.",hint:"Comienza en 10 y resta 2 en cada iteración."},
- {topic:"while",level:"Medio",text:"Suma los números del 1 al 4 y muestra solo el total final.",hint:"Necesitas un acumulador inicializado en 0 y un contador que avance hasta 4."},
- {topic:"break",level:"Medio",text:"Imprime números desde 1 y detén el bucle inmediatamente cuando el valor llegue a 4.",hint:"Usa while, una condición if y break. Piensa si quieres imprimir el 4 antes o después del break."},
- {topic:"for",level:"Básico",text:"Imprime los números del 1 al 4 usando for y range().",hint:"Recuerda que el límite final de range() no se incluye."},
- {topic:"range()",level:"Básico",text:"Imprime 2, 4, 6 y 8 usando for y range().",hint:"Usa inicio 2, límite 10 y un step de 2."},
- {topic:"range()",level:"Básico",text:"Imprime 5, 4, 3, 2 y 1 usando for y range().",hint:"Para bajar, el step debe ser negativo."},
- {topic:"range()",level:"Medio",text:"Imprime 1, 4 y 7 usando una sola llamada a range().",hint:"El inicio es 1 y avanzas de 3 en 3. El límite final no se incluye."},
- {topic:"for",level:"Medio",text:"Calcula y muestra la suma de los números del 1 al 5 usando for.",hint:"Usa un acumulador y recorre range(1, 6)."},
- {topic:"while",level:"Desafío",text:"Cuenta hacia atrás desde 5 hasta 1 y al final imprime FIN.",hint:"El print('FIN') debe quedar fuera del bucle si quieres mostrarlo una sola vez."}
+  {
+    "module": "Módulo 1",
+    "topic": "print()",
+    "level": "Básico",
+    "text": "Muestra en pantalla el texto: Hola, Fénix.",
+    "hint": "Usa print() y coloca el texto entre comillas."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "Variables",
+    "level": "Básico",
+    "text": "Crea una variable llamada nombre con tu nombre y muéstrala con print().",
+    "hint": "Primero asigna un string a nombre y luego imprime la variable."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "Aritmética",
+    "level": "Básico",
+    "text": "Calcula 15 + 7 y muestra el resultado.",
+    "hint": "Python puede usarse como calculadora directamente dentro de print()."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "Aritmética",
+    "level": "Básico",
+    "text": "Calcula 12 * 4 y guarda el resultado en una variable llamada total.",
+    "hint": "Usa el operador * y luego print(total)."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "input()",
+    "level": "Básico",
+    "text": "Pide al usuario su nombre y luego muestra: Hola <nombre>.",
+    "hint": "input() devuelve texto. Guarda el resultado en una variable."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "input()",
+    "level": "Medio",
+    "text": "Pide una ciudad al usuario y muestra: Ciudad registrada: <ciudad>.",
+    "hint": "Concatena texto con la variable o usa varias expresiones en print()."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "Comentarios",
+    "level": "Básico",
+    "text": "Escribe un comentario que explique qué hace una línea print('Servidor activo').",
+    "hint": "Los comentarios de una línea empiezan con #."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "Sintaxis",
+    "level": "Medio",
+    "text": "Corrige este código para que funcione: print(Hola mundo)",
+    "hint": "El texto debe escribirse como string."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "Variables",
+    "level": "Medio",
+    "text": "Guarda 22 en una variable puerto y muestra: Puerto: 22.",
+    "hint": "Puedes pasar más de un argumento a print()."
+  },
+  {
+    "module": "Módulo 1",
+    "topic": "Aritmética",
+    "level": "Desafío",
+    "text": "Guarda 1500 en kilometros y calcula cuántos metros son.",
+    "hint": "1 kilómetro equivale a 1000 metros."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Tipos de datos",
+    "level": "Básico",
+    "text": "Crea una variable edad con un entero y una variable nombre con un string. Muestra ambas.",
+    "hint": "Un entero no lleva comillas; un string sí."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Conversión",
+    "level": "Básico",
+    "text": "Convierte el texto '25' a int, súmale 5 y muestra el resultado.",
+    "hint": "Usa int('25')."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Conversión",
+    "level": "Medio",
+    "text": "Pide un número con input(), conviértelo a int y muestra su doble.",
+    "hint": "input() entrega str; conviértelo antes de multiplicar numéricamente."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Funciones",
+    "level": "Básico",
+    "text": "Define una función saludo() que muestre Hola desde Fénix y luego llámala.",
+    "hint": "Usa def, indentación y después ejecuta saludo()."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Parámetros",
+    "level": "Medio",
+    "text": "Define saludo(nombre) para mostrar Hola seguido del nombre recibido.",
+    "hint": "nombre es el parámetro; pasa un argumento cuando llames la función."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "return",
+    "level": "Medio",
+    "text": "Define sumar(a, b) que retorne la suma y muestra el resultado de sumar(3, 4).",
+    "hint": "Dentro de la función usa return, no solo print()."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Comparación",
+    "level": "Básico",
+    "text": "Comprueba si 10 es mayor que 7 y muestra el resultado booleano.",
+    "hint": "Usa el operador >."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Comparación",
+    "level": "Básico",
+    "text": "Comprueba si puerto = 22 es igual a 22 y muestra True o False.",
+    "hint": "Para comparar igualdad usa ==, no =."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Operadores lógicos",
+    "level": "Medio",
+    "text": "Crea edad = 30 y comprueba si está entre 18 y 65 usando and.",
+    "hint": "Necesitas dos comparaciones unidas por and."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "if",
+    "level": "Básico",
+    "text": "Si uso = 95 es mayor o igual a 90, muestra Alerta.",
+    "hint": "Usa if con >= y recuerda los dos puntos y la indentación."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "if/else",
+    "level": "Medio",
+    "text": "Si temperatura = 18 es menor que 20, muestra Frío; en caso contrario, muestra Normal.",
+    "hint": "Usa if y else."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "if/elif/else",
+    "level": "Medio",
+    "text": "Clasifica uso = 75: >=90 Alerta, >=70 Advertencia, de lo contrario Normal.",
+    "hint": "El orden importa: prueba primero la condición más alta."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Módulo %",
+    "level": "Medio",
+    "text": "Determina si numero = 8 es par usando el operador %.",
+    "hint": "Un número par deja resto 0 al dividir por 2."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Funciones",
+    "level": "Desafío",
+    "text": "Crea evaluar_disco(uso): retorna 'Alerta' si uso >= 90 y 'Normal' en caso contrario.",
+    "hint": "Combina una función, parámetro, if/else y return."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Conversión",
+    "level": "Desafío",
+    "text": "Pide dos números con input(), conviértelos a int y muestra su suma.",
+    "hint": "Convierte ambos valores antes de sumarlos."
+  },
+  {
+    "module": "Módulo 2",
+    "topic": "Lógica",
+    "level": "Desafío",
+    "text": "Con valor = 105, muestra Fuera de rango si es menor que 0 o mayor que 100.",
+    "hint": "Usa or para aceptar cualquiera de las dos condiciones."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "while",
+    "level": "Básico",
+    "text": "Imprime los números del 1 al 5 usando un bucle while.",
+    "hint": "Inicializa en 1, usa <= 5 y aumenta en cada vuelta."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "while",
+    "level": "Básico",
+    "text": "Imprime 10, 8, 6, 4 y 2 usando while.",
+    "hint": "Comienza en 10 y resta 2 en cada iteración."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "while",
+    "level": "Medio",
+    "text": "Suma los números del 1 al 4 y muestra solo el total final.",
+    "hint": "Necesitas un acumulador en 0 y un contador que llegue hasta 4."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "Bucle infinito",
+    "level": "Medio",
+    "text": "Corrige este bucle para que termine: x = 1; while x <= 5: print(x)",
+    "hint": "La variable de control debe cambiar dentro del while."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "break",
+    "level": "Medio",
+    "text": "Imprime 1, 2 y 3; corta el while cuando x llegue a 4.",
+    "hint": "Evalúa la condición de break antes del print si no quieres imprimir 4."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "for",
+    "level": "Básico",
+    "text": "Imprime los números del 1 al 4 usando for y range().",
+    "hint": "El límite final de range() no se incluye."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "range()",
+    "level": "Básico",
+    "text": "Imprime 2, 4, 6 y 8 usando for y range().",
+    "hint": "Usa inicio 2, límite 10 y step 2."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "range()",
+    "level": "Básico",
+    "text": "Imprime 5, 4, 3, 2 y 1 usando for y range().",
+    "hint": "Para bajar, usa un step negativo."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "range()",
+    "level": "Medio",
+    "text": "Imprime 1, 4 y 7 usando una sola llamada a range().",
+    "hint": "Comienza en 1 y avanza de 3 en 3."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "for",
+    "level": "Medio",
+    "text": "Calcula la suma de los números del 1 al 5 usando for.",
+    "hint": "Usa un acumulador y range(1, 6)."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "while",
+    "level": "Desafío",
+    "text": "Cuenta hacia atrás desde 5 hasta 1 y al final imprime FIN.",
+    "hint": "El print('FIN') debe quedar fuera del bucle."
+  },
+  {
+    "module": "Módulo 3",
+    "topic": "for/range()",
+    "level": "Desafío",
+    "text": "Imprime los múltiplos de 3 desde 3 hasta 18 usando range().",
+    "hint": "Piensa en inicio 3, un límite superior a 18 y step 3."
+  }
 ];
 
 let current = 0;
 let pyodide = null;
+function filteredExercises(){
+  const m=document.getElementById("moduleFilter").value;
+  const l=document.getElementById("levelFilter").value;
+  return exercises.map((e,i)=>({...e,_index:i})).filter(e=>(!m||e.module===m)&&(!l||e.level===l));
+}
 const output = document.getElementById("output");
 const runButton = document.getElementById("runButton");
 const status = document.getElementById("status");
@@ -105,6 +380,7 @@ function showExercise(index){
   current=index;
   const ex=exercises[index];
   document.getElementById("exerciseNumber").textContent=`Ejercicio ${index+1}/${exercises.length}`;
+  document.getElementById("module").textContent=ex.module;
   document.getElementById("topic").textContent=ex.topic;
   document.getElementById("level").textContent=ex.level;
   document.getElementById("exercise").textContent=ex.text;
@@ -115,11 +391,19 @@ function showExercise(index){
 showExercise(0);
 
 document.getElementById("newExercise").addEventListener("click",()=>{
-  let next=current;
-  if(exercises.length>1){
-    while(next===current) next=Math.floor(Math.random()*exercises.length);
+  const pool=filteredExercises();
+  if(!pool.length) return;
+  let pick=pool[Math.floor(Math.random()*pool.length)];
+  if(pool.length>1){
+    while(pick._index===current) pick=pool[Math.floor(Math.random()*pool.length)];
   }
-  showExercise(next);
+  showExercise(pick._index);
+});
+["moduleFilter","levelFilter"].forEach(id=>{
+  document.getElementById(id).addEventListener("change",()=>{
+    const pool=filteredExercises();
+    if(pool.length) showExercise(pool[0]._index);
+  });
 });
 
 document.getElementById("hintButton").addEventListener("click",()=>{
