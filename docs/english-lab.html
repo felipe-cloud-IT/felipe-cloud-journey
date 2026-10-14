@@ -13,8 +13,10 @@ nav a.active{border-color:var(--accent);color:var(--accent)}main{padding:18px}.g
 </style></head><body><header><div class="wrap"><h1>Laboratorio Inglés TI Fénix</h1><p class="sub">Práctica breve de inglés aplicado a soporte, redes, infraestructura y trabajo técnico.</p>
 <nav><a href="./">Inicio</a><a href="labs.html">Laboratorios</a><a href="azure-lab.html">AZ-104</a><a class="active" href="english-lab.html">Inglés TI</a><a href="troubleshooting-lab.html">Troubleshooting</a><a href="network-lab.html">Redes</a><a href="powershell-lab.html">PowerShell</a><a href="python-lab.html">Python</a></nav></div></header>
 <main><div class="wrap"><div class="grid"><section class="card"><div class="meta"><span id="count"></span> · <span id="area"></span> · <span id="level"></span></div>
-<div id="prompt" class="prompt"></div><div class="actions"><button class="btn" id="next">Otro ejercicio</button><button class="btn" id="hintBtn">Pista</button><button class="btn" id="answerBtn">Ver referencia</button></div>
-<div id="hint" class="hint"></div><div id="answer" class="answer"></div><p class="note">Primero responde por tu cuenta. La referencia sirve para comparar, no para reemplazar tu razonamiento.</p></section>
+<div id="prompt" class="prompt"></div><div class="actions"><button class="btn" id="next">Otro ejercicio</button><button class="btn" id="hintBtn">Pista</button><button class="btn" id="answerBtn">Ver guía de corrección</button></div>
+<div id="hint" class="hint"></div>
+<div id="answer" class="answer"></div>
+<div id="coach" class="answer" style="display:none;border-left-color:var(--accent)"></div><p class="note">Primero responde por tu cuenta. La guía te permite comparar tu respuesta. Para una corrección personalizada de gramática, ortografía y naturalidad, tráela a Alex Fénix.</p></section>
 <section class="card"><h2>Tu respuesta</h2><textarea id="work" placeholder="Escribe aquí tu respuesta, comando, diagnóstico o razonamiento..."></textarea><div class="actions"><button class="btn" id="review">Revisar respuesta</button><button class="btn" id="clear">Limpiar</button></div><p class="note">Atajo: Ctrl+Enter para revisar tu respuesta.</p></section></div></div></main>
 <script>const items=[{"area":"Soporte","level":"Básico","prompt":"Un usuario dice: “I can’t access the shared folder.” Responde en inglés pidiendo que confirme si está conectado a la red.","hint":"Usa Could you please confirm...?","answer":"Could you please confirm whether you are connected to the company network?"},{"area":"Soporte","level":"Básico","prompt":"Traduce al inglés: “Voy a revisar la configuración de red de tu equipo.”","hint":"I’m going to check...","answer":"I’m going to check the network configuration on your computer."},{"area":"Tickets","level":"Básico","prompt":"Escribe una frase breve para informar que el incidente fue resuelto.","hint":"The issue has been...","answer":"The issue has been resolved. Please let me know if the problem happens again."},{"area":"Redes","level":"Medio","prompt":"Explica en inglés que el equipo obtiene una IP válida, pero no resuelve nombres DNS.","hint":"valid IP address / resolve DNS names","answer":"The computer is receiving a valid IP address, but it cannot resolve DNS names."},{"area":"Usuarios","level":"Medio","prompt":"Pide al usuario que reinicie el equipo y vuelva a intentar.","hint":"restart / try again","answer":"Please restart the computer and try again."},{"area":"Diagnóstico","level":"Medio","prompt":"Explica: “Puedo hacer ping a la puerta de enlace, pero no al servidor.”","hint":"gateway / server","answer":"I can ping the default gateway, but I cannot reach the server."},{"area":"Correo","level":"Medio","prompt":"Redacta una frase para decir que adjuntas evidencia del error.","hint":"attached / screenshot / error","answer":"I’ve attached a screenshot showing the error for reference."},{"area":"Infraestructura","level":"Medio","prompt":"Traduce: “El servicio está activo, pero todavía debemos verificar que la aplicación funcione correctamente.”","hint":"service is running / still need to verify","answer":"The service is running, but we still need to verify that the application is working correctly."},{"area":"Entrevista","level":"Desafío","prompt":"Responde en 2–3 frases: “Tell me about a time you solved a network problem.”","hint":"Situation → action → result","answer":"A user lost connectivity after a network change. I traced the path, identified the affected switch connection, restored the link, and verified access to the required services."},{"area":"Soporte","level":"Desafío","prompt":"Explica en inglés que no quieres aplicar cambios antes de confirmar la causa raíz.","hint":"root cause / changes","answer":"I don’t want to make configuration changes until we confirm the root cause of the issue."},{"area":"Tickets","level":"Básico","prompt":"Traduce: “¿Puedes enviarme una captura del mensaje de error?”","hint":"Could you send me...?","answer":"Could you send me a screenshot of the error message?"},{"area":"Azure","level":"Medio","prompt":"Explica en inglés que revisarás los permisos RBAC antes de modificar el recurso.","hint":"RBAC permissions / resource","answer":"I’ll check the RBAC permissions before making any changes to the resource."},{"area":"Incidentes","level":"Desafío","prompt":"Escribe una actualización breve: el servicio volvió, estás monitoreando y aún no cierras el incidente.","hint":"restored / monitoring / incident remains open","answer":"Service has been restored. I’m monitoring the environment to confirm stability, so the incident will remain open for now."},{"area":"Comunicación","level":"Básico","prompt":"Traduce: “Gracias por confirmar. Continuaré con la revisión.”","hint":"Thanks for confirming...","answer":"Thanks for confirming. I’ll continue with the review."},{"area":"Documentación","level":"Medio","prompt":"Escribe una frase indicando que documentaste la causa y la solución.","hint":"documented / root cause / resolution","answer":"I documented the root cause and the resolution steps for future reference."}];
 let current=0;
@@ -24,6 +26,7 @@ const levelEl=document.getElementById('level');
 const promptEl=document.getElementById('prompt');
 const hintEl=document.getElementById('hint');
 const answerEl=document.getElementById('answer');
+const coachEl=document.getElementById('coach');
 const nextBtn=document.getElementById('next');
 const hintBtn=document.getElementById('hintBtn');
 const answerBtn=document.getElementById('answerBtn');
@@ -39,11 +42,13 @@ function show(i){
   levelEl.textContent=x.level;
   promptEl.textContent=x.prompt;
   hintEl.textContent=x.hint;
-  answerEl.textContent=x.answer;
+  answerEl.textContent='Modelo recomendado: '+x.answer;
+  coachEl.textContent='Qué revisar en tu respuesta: ortografía, estructura de la pregunta, preposiciones y una alternativa más natural/profesional. Si quieres corrección exacta de lo que escribiste, pégalo en el chat con Alex Fénix.';
   hintEl.style.display='none';
   answerEl.style.display='none';
+  coachEl.style.display='none';
   hintBtn.textContent='Pista';
-  answerBtn.textContent='Ver referencia';
+  answerBtn.textContent='Ver guía de corrección';
 }
 show(0);
 
@@ -60,11 +65,11 @@ hintBtn.addEventListener('click',()=>{
 answerBtn.addEventListener('click',()=>{
   const on=answerEl.style.display==='block';
   answerEl.style.display=on?'none':'block';
-  answerBtn.textContent=on?'Ver referencia':'Ocultar referencia';
+  answerBtn.textContent=on?'Ver guía de corrección':'Ocultar guía';
 });
 function reviewAnswer(){
   answerEl.style.display='block';
-  answerBtn.textContent='Ocultar referencia';
+  answerBtn.textContent='Ocultar guía';
 }
 reviewBtn.addEventListener('click',reviewAnswer);
 workEl.addEventListener('keydown',(e)=>{
