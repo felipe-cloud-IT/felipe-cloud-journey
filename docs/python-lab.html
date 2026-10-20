@@ -569,7 +569,26 @@ sys.stderr = _fenix_stderr
     const stderr=pyodide.runPython("_fenix_stderr.getvalue()");
     output.textContent=(stdout||stderr||"Programa ejecutado sin salida.");
   }catch(err){
-    output.textContent=String(err);
+    // Recuperar la salida previa y el diagnóstico Python.
+    let stdout = "";
+    let stderr = "";
+    try { stdout = pyodide.runPython("_fenix_stdout.getvalue()"); } catch(e) {}
+    try { stderr = pyodide.runPython("_fenix_stderr.getvalue()"); } catch(e) {}
+    const detail = String((err && (err.stack || err.message)) || err);
+    // Mostrar el traceback de Python sin la traza interna de JS/WASM.
+    const start = detail.indexOf("Traceback (most recent call last):");
+    let diagnostic;
+    if (start >= 0) {
+      diagnostic = detail.slice(start)
+        .replace(/\\r?\\n\\s*PythonError\\b[\\s\\S]*$/m, "")
+        .trim();
+    } else {
+      diagnostic = detail.split(/\\r?\\n\\s+at\\s/)[0].trim();
+    }
+    if (stderr && stderr.includes("Traceback (most recent call last):")) {
+      diagnostic = "";
+    }
+    output.textContent = [stdout, stderr, diagnostic].filter(Boolean).join("\\n");
   }finally{
     try{
       pyodide.runPython("sys.stdout = sys.__stdout__; sys.stderr = sys.__stderr__");
