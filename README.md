@@ -22,7 +22,7 @@ La página principal de GitHub Pages es una presentación profesional. Los recur
 
 ## Formación universitaria
 
-Ingeniería en Computación e Informática, mención Redes e Infraestructura — matriculado, ingreso 2027.
+Ingeniería en Computación e Informática, mención Redes e Infraestructura — matriculado, ingreso 2026.
 
 ## Soluciones aplicadas
 
